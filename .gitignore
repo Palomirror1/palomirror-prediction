@@ -1,0 +1,10 @@
+# 데이터 (대용량 · 원본 비공개 / 파생물은 재생성 가능)
+final IMU dataset/
+processed/
+
+# 로그 · 임시 확인용 · 캐시
+*.log
+__pycache__/
+*.pyc
+peek_*.csv
+diag_folds.py
