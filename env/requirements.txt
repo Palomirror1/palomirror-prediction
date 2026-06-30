@@ -1,0 +1,7 @@
+# palomirror-prediction 의존성 (pip)
+#   설치:  pip install -r env/requirements.txt
+#   GPU 없이 CPU만으로 동작합니다.
+
+numpy>=1.24
+torch>=2.0           # 학습/추론. CPU 빌드로 충분
+bleak>=0.21          # 실센서 수집(collect_imu.py)용. --simulate 만 쓰면 불필요

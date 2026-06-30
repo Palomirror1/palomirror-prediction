@@ -1,6 +1,12 @@
-# 데이터 (대용량 · 원본 비공개 / 파생물은 재생성 가능)
-final IMU dataset/
-processed/
+# 대용량 데이터 — 폴더 구조(.gitkeep)만 git에 두고 내용은 제외
+data/raw/*
+data/cache/*
+data/output/*
+data/logs/*
+!data/raw/.gitkeep
+!data/cache/.gitkeep
+!data/output/.gitkeep
+!data/logs/.gitkeep
 
 # 로그 · 임시 확인용 · 캐시
 *.log

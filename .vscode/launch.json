@@ -1,0 +1,62 @@
+{
+    // 파이프라인 단계별 디버그/실행 구성. ▷(F5) 옆 드롭다운에서 골라 실행.
+    // 인터프리터는 settings.json 의 python.defaultInterpreterPath 를 따름.
+    //
+    // ※ 이 프로젝트는 단일 src/main.py + 환경변수 방식이 아니라,
+    //   단계별 스크립트 4개 + CLI 인자(--folds 등) 구조라 그 형태로 작성함.
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: 0) 수집 (시뮬)",
+            "type": "debugpy", "request": "launch",
+            "program": "${workspaceFolder}/collect_imu.py",
+            "args": ["--subject", "1", "--trial", "1", "--simulate"],
+            "console": "integratedTerminal", "cwd": "${workspaceFolder}",
+            "justMyCode": true,
+            "env": { "PYDEVD_WARN_SLOW_RESOLVE_TIMEOUT": "5.0" }
+        },
+        {
+            "name": "Python: 1) 전처리",
+            "type": "debugpy", "request": "launch",
+            "program": "${workspaceFolder}/preprocess_imu.py",
+            "args": ["--source-hz", "100"],
+            "console": "integratedTerminal", "cwd": "${workspaceFolder}",
+            "justMyCode": true,
+            "env": { "PYDEVD_WARN_SLOW_RESOLVE_TIMEOUT": "5.0" }
+        },
+        {
+            "name": "Python: 2) 데이터셋 빌드",
+            "type": "debugpy", "request": "launch",
+            "program": "${workspaceFolder}/make_a9_phase_forecast.py",
+            "console": "integratedTerminal", "cwd": "${workspaceFolder}",
+            "justMyCode": true,
+            "env": { "PYDEVD_WARN_SLOW_RESOLVE_TIMEOUT": "5.0" }
+        },
+        {
+            "name": "Python: 3) 학습 LOSO (전체)",
+            "type": "debugpy", "request": "launch",
+            "program": "${workspaceFolder}/train_tcn_reg.py",
+            "console": "integratedTerminal", "cwd": "${workspaceFolder}",
+            "justMyCode": true,
+            "env": { "PYDEVD_WARN_SLOW_RESOLVE_TIMEOUT": "5.0" }
+        },
+        {
+            "name": "Python: 3') 학습 빠른확인 (3 fold)",
+            "type": "debugpy", "request": "launch",
+            "program": "${workspaceFolder}/train_tcn_reg.py",
+            "args": ["--folds", "3"],
+            "console": "integratedTerminal", "cwd": "${workspaceFolder}",
+            "justMyCode": true,
+            "env": { "PYDEVD_WARN_SLOW_RESOLVE_TIMEOUT": "5.0" }
+        },
+        {
+            "name": "Python: 4) 배포모델 저장",
+            "type": "debugpy", "request": "launch",
+            "program": "${workspaceFolder}/train_tcn_reg.py",
+            "args": ["--folds", "1", "--save", "data/cache/tcn_a9_forecast.pt"],
+            "console": "integratedTerminal", "cwd": "${workspaceFolder}",
+            "justMyCode": true,
+            "env": { "PYDEVD_WARN_SLOW_RESOLVE_TIMEOUT": "5.0" }
+        }
+    ]
+}

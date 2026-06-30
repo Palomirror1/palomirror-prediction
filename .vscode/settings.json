@@ -1,0 +1,20 @@
+{
+    // ── 파이썬 인터프리터 ──────────────────────────────────────────────
+    // 각자 환경에 맞게 바꾸세요. 아래는 이 머신의 venv 경로입니다.
+    // conda 로 env/environment.yml 환경을 만든 경우 그 env 의 python 으로 교체.
+    "python.defaultInterpreterPath": "/home/jiyul/.venv/bin/python",
+
+    // ── 탐색기/검색에서 숨길 것 ────────────────────────────────────────
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "data/raw": true        // 1.6GB 원본 데이터는 탐색기에서 숨김 (logs/output/cache 는 보이게)
+    },
+    // 대용량 data 폴더는 파일감시/검색 제외(성능)
+    "files.watcherExclude": {
+        "**/data/**": true
+    },
+    "search.exclude": {
+        "**/data": true
+    }
+}

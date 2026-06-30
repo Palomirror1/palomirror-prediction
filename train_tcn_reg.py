@@ -19,7 +19,7 @@ import os, argparse, numpy as np, torch
 import torch.nn as nn
 from torch.utils.data import TensorDataset, DataLoader
 
-NPZ        = "processed/a9_phase_forecast.npz"   # 18채널(U+F+CHS) 입력, phase 라벨 포함
+NPZ        = "data/cache/processed/a9_phase_forecast.npz"   # 18채널(U+F+CHS) 입력, phase 라벨 포함
 CHANNELS   = 32
 LEVELS     = 3        # dilation 1,2,4
 KERNEL     = 3

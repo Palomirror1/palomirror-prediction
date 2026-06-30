@@ -9,20 +9,39 @@
 
 타깃이 IMU 신호 자체에서 나오므로 사람 라벨이 필요 없다 (self-supervised).
 
+## 폴더 구조
+
+```
+collect_imu.py / preprocess_imu.py / make_a9_phase_forecast.py / train_tcn_reg.py
+env/                    의존성 파일 (requirements.txt, environment.yml)
+.vscode/                편집기 설정 (settings.json, launch.json)
+data/                   (git 제외 · 구조만 .gitkeep 으로 유지)
+ ├ raw/                 원본 IMU 녹화 (final IMU dataset/…)
+ ├ cache/               중간 산출물·모델 (processed/, a9_phase_forecast.npz, tcn_a9_forecast.pt)
+ ├ output/              출력물 (예측·평가 CSV 등)
+ └ logs/                실행 로그
+```
+
 ## 파이프라인
 
 | 단계 | 스크립트 | 입력 → 출력 |
 |---|---|---|
-| 1. 전처리 | `preprocess_imu.py` | 원본 IMU → `processed/<subject>/*.csv` (18채널 정제) |
-| 2. 데이터셋 빌드 | `make_a9_phase_forecast.py` | CSV → `processed/a9_phase_forecast.npz` (윈도우·Δ타깃·phase) |
-| 3. 학습/평가 | `train_tcn_reg.py` | npz → LOSO 평가 + 배포모델 `tcn_a9_forecast.pt` |
+| 0. 수집 | `collect_imu.py` | IMU 센서(nRF52840) → `data/raw/.../s{N}_a9_t{K}_u.csv` |
+| 1. 전처리 | `preprocess_imu.py` | 원본 → `data/cache/processed/<subject>/*.csv` (18채널 정제) |
+| 2. 데이터셋 빌드 | `make_a9_phase_forecast.py` | CSV → `data/cache/processed/a9_phase_forecast.npz` (윈도우·Δ타깃·phase) |
+| 3. 학습/평가 | `train_tcn_reg.py` | npz → LOSO 평가 + 배포모델 `data/cache/tcn_a9_forecast.pt` |
 
 ```bash
+# 0) 수집 — 실센서. 센서 없으면 --simulate 로 배선 테스트 (bleak 불필요)
+python collect_imu.py --subject 1 --trial 1 --simulate
+
 python preprocess_imu.py --source-hz 100
 python make_a9_phase_forecast.py
-python train_tcn_reg.py                       # 전체 LOSO 평가
-python train_tcn_reg.py --folds 1 --save tcn_a9_forecast.pt   # 배포모델 저장
+python train_tcn_reg.py                  > data/logs/reg_loso.log     # 전체 LOSO 평가
+python train_tcn_reg.py --folds 1 --save data/cache/tcn_a9_forecast.pt   # 배포모델 저장
 ```
+
+의존성 설치: `pip install -r env/requirements.txt` 또는 `conda env create -f env/environment.yml`
 
 ## 입력 / 출력
 
@@ -43,7 +62,7 @@ python train_tcn_reg.py --folds 1 --save tcn_a9_forecast.pt   # 배포모델 저
 | 평균 개선율 | **15.3%** |
 | 모델 | TCN, 파라미터 ≈ 18,086 (CPU 실시간 가능) |
 
-## 배포 모델 추론 순서 (`tcn_a9_forecast.pt`)
+## 배포 모델 추론 순서 (`data/cache/tcn_a9_forecast.pt`)
 
 1. 과거 1초 IMU 18채널 수집 (50×18)
 2. per-window 센터링: `X -= X.mean(시간축)`

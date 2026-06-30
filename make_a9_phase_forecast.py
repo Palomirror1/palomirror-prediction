@@ -20,7 +20,7 @@ a9(#9 물병 reach→grasp→pour→복귀) 미래-IMU 예측 데이터셋 빌�
 """
 import os, glob, csv, numpy as np
 
-PROC = "processed"
+PROC = "data/cache/processed"
 ACT = "a9"
 WIN = 50          # 입력 윈도우 (1.0s @50Hz)
 HOR = 25          # 예측 지평 (0.5s @50Hz)

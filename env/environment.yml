@@ -1,0 +1,15 @@
+# palomirror-prediction 의존성 (conda)
+#   생성:  conda env create -f env/environment.yml
+#   활성화: conda activate palomirror-prediction
+name: palomirror-prediction
+channels:
+  - pytorch
+  - conda-forge
+dependencies:
+  - python=3.12
+  - numpy>=1.24
+  - pytorch>=2.0
+  - cpuonly            # CPU 빌드. GPU 쓰려면 이 줄 빼고 pytorch-cuda=<버전> 추가
+  - pip
+  - pip:
+      - bleak>=0.21    # 실센서 수집용 (--simulate 만 쓰면 불필요)

@@ -41,8 +41,8 @@ import numpy as np
 # 기본 설정 (CLI로 덮어쓰기 가능)
 # ----------------------------------------------------------------------------
 DEFAULTS = dict(
-    data_root="final IMU dataset",
-    out_root="processed",
+    data_root="data/raw/final IMU dataset",
+    out_root="data/cache/processed",
     side="R",            # 'R'(RU,RF) 또는 'L'(LU,LF). CHS(가슴)는 side 무관 항상 포함
     source_hz=100.0,     # ⚠️ 원본 샘플링레이트 — 데이터셋 문서로 반드시 확인! (timestamp는 샘플인덱스라 추정 불가)
     target_hz=50.0,      # 작업 샘플링레이트
