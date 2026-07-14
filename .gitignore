@@ -1,3 +1,6 @@
+# 대용량 데이터셋 — 로컬에만 보관, GitHub에는 올리지 않음
+dataset/
+
 # 대용량 데이터 — 폴더 구조(.gitkeep)만 git에 두고 내용은 제외
 data/raw/*
 data/cache/*
